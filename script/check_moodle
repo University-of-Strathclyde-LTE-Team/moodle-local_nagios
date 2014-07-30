@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+# This file is part of local_nagios
+# 
+# local_nagios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# local_nagios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with local_nagios.  If not, see <http:# www.gnu.org/licenses/>.
+# 
+# Author: Michael Aherne
+# Copyright 2014 University of Strathclyde
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+
+my $plugin;
+my $service;
+my $warning;
+my $critical;
+my $verbose = 0;
+
+GetOptions('plugin=s' => \$plugin, 'service=s' => \$service, 'warning=i' => \$warning, 
+    'critical=i' => \$critical, 'verbose+' => \$verbose);
+
+die "plugin required" if not defined $plugin;
+die "service required" if not defined $service;
+
+# Get P and S options (Moodle plugin and Moodle service)
+# Also get warning and critical (-w and -c)
+
+
+# my $MOODLE_HOME = 'C:/Users/vas07101/dev/htdocs/moodle';
+my $MOODLE_HOME = '/cygdrive/c/Users/vas07101/dev/htdocs/moodle';
+
+# print $MOODLE_HOME;
+print "php $MOODLE_HOME/local/nagios/cli/check.php?plugin=$plugin&service=$service";
+
+#my $result = `php $MOODLE_HOME/local/nagios/cli/check.php?plugin=$plugin&service=$service`;
+
+#my $exit_code = $? >> 8;
+#print "$exit_code\n";
+#print "$result\n"; 
