@@ -20,8 +20,10 @@
 
 use strict;
 use warnings;
-
 use Getopt::Long;
+
+my $MOODLE_HOME = '/var/www/beta';
+my $PHP_COMMAND = 'php';
 
 my $plugin;
 my $service;
@@ -35,14 +37,14 @@ GetOptions('plugin=s' => \$plugin, 'service=s' => \$service, 'warning=i' => \$wa
 die "plugin required" if not defined $plugin;
 die "service required" if not defined $service;
 
-my $MOODLE_HOME = '/var/www/beta';
+
 
 # print $MOODLE_HOME;
 # print "php $MOODLE_HOME/local/nagios/cli/check.php --plugin=$plugin --service=$service";
 
 # TODO: Pass other parameters if supplied
 
-my $result = `php $MOODLE_HOME/local/nagios/cli/check.php --plugin=$plugin --service=$service`;
+my $result = `$PHP_COMMAND $MOODLE_HOME/local/nagios/cli/check.php --plugin=$plugin --service=$service`;
 
 my $exit_code = $? >> 8;
 print "$result\n";
