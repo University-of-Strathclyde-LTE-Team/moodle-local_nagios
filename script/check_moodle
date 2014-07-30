@@ -43,7 +43,7 @@ die "service required" if not defined $service;
 my $MOODLE_HOME = '/cygdrive/c/Users/vas07101/dev/htdocs/moodle';
 
 # print $MOODLE_HOME;
-print "php $MOODLE_HOME/local/nagios/cli/check.php?plugin=$plugin&service=$service";
+print "php $MOODLE_HOME/local/nagios/cli/check.php -plugin $plugin -service $service";
 
 #my $result = `php $MOODLE_HOME/local/nagios/cli/check.php?plugin=$plugin&service=$service`;
 
