@@ -78,6 +78,8 @@ function local_nagios_nagios_status($service, $params = null) {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_CRITICAL;
             }
             $result['data']['text'] = "Number of event queue handlers awaiting execution " . $count;
+            return $result;
+            break;
         default:
             debugging("Invalid core service");
     }
