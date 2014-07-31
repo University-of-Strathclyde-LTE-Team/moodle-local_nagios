@@ -72,7 +72,7 @@ function local_nagios_nagios_status($service, $params = null) {
             $count = $DB->count_records('events_queue_handlers');
             if ($count < $warning) {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_OK;
-            } else if ($timeelapsed < $critical) {
+            } else if ($count < $critical) {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_WARNING;
             } else {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_CRITICAL;
