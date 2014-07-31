@@ -23,6 +23,10 @@ function local_nagios_nagios_services() {
         'cron' => array(
             'name' => 'Cron job',
             'description' => 'Checks that the cron job is running properly by checking the last time it was run.'
+        ),
+        'eventqueue' => array(
+                'name' => 'Event queue',
+                'description' => 'Monitor the size of the event handling queue.'
         )
     );
 }
@@ -62,6 +66,18 @@ function local_nagios_nagios_status($service, $params = null) {
             $result['data']['text'] = "Cron last ran at " . date(DATE_RSS, $lastcron) . ", $timeelapsed seconds ago";
             return $result;
             break;
+        case 'eventqueue':
+            $warning = 10;
+            $critical = 100;
+            $count = $DB->count_records('events_queue_handlers');
+            if ($count < $warning) {
+                $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_OK;
+            } else if ($timeelapsed < $critical) {
+                $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_WARNING;
+            } else {
+                $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_CRITICAL;
+            }
+            $result['data']['text'] = "Number of event queue handlers awaiting execution " . $count;
         default:
             debugging("Invalid core service");
     }
