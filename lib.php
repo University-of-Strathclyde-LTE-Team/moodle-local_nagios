@@ -30,6 +30,18 @@ function local_nagios_nagios_services() {
 function local_nagios_nagios_status($service, $params = null) {
     global $DB;
 
+    $warning = 10 * 60;
+    $critical = 60 * 60;
+
+    if (!empty($params)) {
+        if (isset($params['warning'])) {
+            $warning = $params['warning'];
+        }
+        if (isset($params['critical'])) {
+            $critical = $params['critical'];
+        }
+    }
+
     $result = \local_nagios\service::$default_state_result;
 
     switch ($service) {
@@ -40,14 +52,14 @@ function local_nagios_nagios_status($service, $params = null) {
                 return $result;
             }
             $timeelapsed = time() - $lastcron;
-            if ($timeelapsed < 10 * 60) {
+            if ($timeelapsed < $warning) {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_OK;
-            } else if ($timeelapsed < 60 * 60) {
+            } else if ($timeelapsed < $critical) {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_WARNING;
             } else {
                 $result['data']['status'] = \local_nagios\service::NAGIOS_STATUS_CRITICAL;
             }
-            $result['data']['text'] = "Cron last ran at " . date(DATE_RSS, $lastcron) . " $timeelapsed seconds ago";
+            $result['data']['text'] = "Cron last ran at " . date(DATE_RSS, $lastcron) . ", $timeelapsed seconds ago";
             return $result;
             break;
         default:
