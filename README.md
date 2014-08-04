@@ -41,9 +41,46 @@ Use these command in Nagios service definitions as normal.
 
 The local_nagios plugin scans other Moodle plugins looking for the callbacks "nagios_services" and "nagios_status".
 
-**TO BE FINISHED**
+### nagios_services callback
+
+This provides metadata on the services provided by the plugin. It is a simple array of items like this:
+
+```
+array(
+        'cron' => array(
+            'name' => 'Cron job',
+            'description' => 'Checks that the cron job is running properly by checking the last time it was run.'
+        ),
+        'eventqueue' => array(
+                'name' => 'Event queue',
+                'description' => 'Monitor the size of the event handling queue.'
+        )
+    )
+```
+
+### nagios_status callback
+
+This does the actual service checking. The function should have the signature XXX_nagios_status($service, $params = null), and return a data object in the format described in the next section.
+
+### Status result format
+
+The result format is as follows:
+
+```
+array(
+  'key'  => 'IDENTIFIER',
+  'data' => array(
+    'status' => STATUS_CODE,
+    'type    => 'state', // Can be a 'state' for OK, Warning, Critical, Unknown) or can be 'perf', which does
+                         // Cause an alert, but can be processed later by custom programs
+    'text'   => 'Text description for the problem',
+  ),
+);
+```
+
+The \local_nagios\service object has constants for the status code, e.g. \local_nagios\service::NAGIOS_STATUS_WARNING
 
 ## Notes
 
-1. The above describes how the Nagios plugin should be set up for an environment where Nagios and Moodle are running on the same server. This may not be the case for most installations, where the two systems are on different servers. In this case, the Nagios NRPE system should be used.
+1. The above describes how the Nagios plugin should be set up for an environment where Nagios and Moodle are running on the same server. This is unlikely to be the case for most installations, where the two systems may be on different servers. In this case, the Nagios NRPE system should be used.
 2. The Nagios plugin is intended to be run on a Linux platform, although it may be possible to get it to work under Windows.

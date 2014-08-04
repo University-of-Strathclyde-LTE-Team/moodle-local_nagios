@@ -39,7 +39,7 @@ if ($action == 'servicelist') {
     foreach ($servicelist as $plugin => $pluginservices) {
         foreach ($pluginservices as $name => $pluginservice) {
             $row = new html_table_row(array($plugin, $name, $pluginservice['description']));
-            $row->cells[] = new html_table_cell('edit');
+            $row->cells[] = new html_table_cell('view');
             $table->data[] = $row;
         }
     }
