@@ -34,7 +34,7 @@ Use these command in Nagios service definitions as normal.
 
 ## Permission requirements
 
-1. The Nagios plugin calls the script /cli/check.php in the Moodle plugin. This means that the user account Nagios is running under *must* have write access to the Moodle data directory, otherwise all checks will result in a n error message.
+1. The Nagios plugin calls the script /cli/check.php in the Moodle plugin. This means that the user account Nagios is running under *must* have write access to the Moodle data directory, otherwise all checks will result in an error message.
 2. If the user account Nagios is running under has to use sudo to call the PHP executable, this must be configured in the $PHP_COMMAND variable in the check_moodle script. The sudo access for the account must also be configured to be able to run the PHP executable without being challenged for a password.
 
 ## Service API
