@@ -64,6 +64,11 @@ if ($options['critical']) {
     $params['critical'] = $options['critical'];
 }
 
+if ($critical < $warning) {
+    echo "Critical threshold cannot be less than warning";
+    exit(3);
+}
+
 $pluginmanager = plugin_manager::instance();
 $plugininfo = $pluginmanager->get_plugin_info($plugin);
 
