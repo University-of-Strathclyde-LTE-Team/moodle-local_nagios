@@ -21,7 +21,6 @@
 define('CLI_SCRIPT', 1);
 require_once(__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/pluginlib.php');
-
 require_once($CFG->libdir.'/clilib.php');
 
 // TODO: Add some security!!!!

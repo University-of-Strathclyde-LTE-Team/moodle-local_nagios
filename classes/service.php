@@ -20,7 +20,6 @@
 
 namespace local_nagios;
 
-use Behat\Behat\Exception\Exception;
 /**
  * Base class for built-in services.
  *
@@ -63,7 +62,7 @@ class service {
                 }
                 try {
                     $result[$plugin] = $function();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     debugging("Unable to get Nagios services from $plugin");
                 }
             }

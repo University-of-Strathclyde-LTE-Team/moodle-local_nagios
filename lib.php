@@ -81,7 +81,7 @@ function local_nagios_nagios_status($service, $params = null) {
             return $result;
             break;
         default:
-            debugging("Invalid core service");
+            throw new \local_nagios\invalid_service_exception("Invalid core service");
     }
 
 }
