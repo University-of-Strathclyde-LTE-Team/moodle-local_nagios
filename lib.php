@@ -18,15 +18,30 @@
 // Author: Michael Aherne
 // Copyright 2014 University of Strathclyde
 
+/**
+ * Return metadata describing the services defined by this plugin.
+ *
+ * The return format is an array, keyed by service name, of arrays
+ * containing the following items:
+ *
+ * * name (optional): a short human-readable name
+ * * description: an explanation of what the service actually monitors
+ * * variable (optional): a description of the variable that will be checked
+ *       against the warning and critical thresholds
+ *
+ * @return array list of service descriptions
+ */
 function local_nagios_nagios_services() {
     return array(
         'cron' => array(
             'name' => 'Cron job',
-            'description' => 'Checks that the cron job is running properly by checking the last time it was run.'
+            'description' => 'Checks that the cron job is running properly by checking the last time it was run.',
+            'variable' => 'Time in seconds since last run'
         ),
         'eventqueue' => array(
                 'name' => 'Event queue',
-                'description' => 'Monitor the size of the event handling queue.'
+                'description' => 'Monitor the size of the event handling queue.',
+                'variable' => 'Number of handlers in the event_queue_handlers table'
         )
     );
 }
