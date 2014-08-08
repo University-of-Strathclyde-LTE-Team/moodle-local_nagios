@@ -36,7 +36,7 @@ function local_nagios_nagios_services() {
         'cron' => array(
             'name' => 'Cron job',
             'description' => 'Checks that the cron job is running properly by checking the last time it was run.',
-            'variable' => 'Time in seconds since last run'
+            'variable' => 'Number of seconds since last run'
         ),
         'eventqueue' => array(
                 'name' => 'Event queue',
