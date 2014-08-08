@@ -48,6 +48,8 @@ for my $key ( keys %$php_options) {
     }
 };
 
-my $result = system($command);
+my $result = qx/$command/;
+print $result;
+
 my $exit_code = $? >> 8;
 exit($exit_code);
