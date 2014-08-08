@@ -1,6 +1,5 @@
 <?php
 
-use Michelf\Markdown;
 // This file is part of local_nagios
 //
 // local_nagios is free software: you can redistribute it and/or modify
@@ -21,6 +20,8 @@ use Michelf\Markdown;
 
 require_once('../../config.php');
 require_once($CFG->libdir.'/markdown/Markdown.php');
+
+use Michelf\Markdown;
 
 require_login(SITEID);
 require_capability('moodle/site:config', context_system::instance());
@@ -53,7 +54,7 @@ if ($action == 'servicelist') {
     echo $OUTPUT->header();
     echo $OUTPUT->heading("Nagios services");
     echo html_writer::table($table);
-    $markdown = new \Michelf\Markdown();
+    $markdown = new Markdown();
     echo $OUTPUT->box($markdown->transform(get_string('servicelist_help', 'local_nagios')));
     echo $OUTPUT->footer();
 } else {
