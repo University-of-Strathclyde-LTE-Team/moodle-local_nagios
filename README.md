@@ -39,7 +39,7 @@ Use these command in Nagios service definitions as normal.
 
 ## Service API
 
-The local_nagios plugin scans other Moodle plugins looking for the callbacks "nagios_services" and "nagios_status".
+The local_nagios plugin scans other Moodle plugins looking for the callbacks "nagios_services" and "nagios_status" in lib.php.
 
 ### nagios_services callback
 
