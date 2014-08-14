@@ -39,9 +39,9 @@ function local_nagios_nagios_services() {
             'variable' => 'Number of seconds since last run'
         ),
         'eventqueue' => array(
-                'name' => 'Event queue',
-                'description' => 'Monitor the size of the event handling queue.',
-                'variable' => 'Number of handlers in the event_queue_handlers table'
+            'name' => 'Event queue',
+            'description' => 'Monitor the size of the event handling queue.',
+            'variable' => 'Number of handlers in the event_queue_handlers table'
         )
     );
 }

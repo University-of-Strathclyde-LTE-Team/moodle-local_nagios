@@ -49,11 +49,13 @@ This provides metadata on the services provided by the plugin. It is a simple ar
 array(
         'cron' => array(
             'name' => 'Cron job',
-            'description' => 'Checks that the cron job is running properly by checking the last time it was run.'
+            'description' => 'Checks that the cron job is running properly by checking the last time it was run.',
+            'variable' => 'Number of seconds since last run'
         ),
         'eventqueue' => array(
-                'name' => 'Event queue',
-                'description' => 'Monitor the size of the event handling queue.'
+            'name' => 'Event queue',
+            'description' => 'Monitor the size of the event handling queue.',
+            'variable' => 'Number of handlers in the event_queue_handlers table'
         )
     )
 ```
