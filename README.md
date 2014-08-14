@@ -82,6 +82,12 @@ array(
 
 The \local_nagios\service object has constants for the status code, e.g. \local_nagios\service::NAGIOS_STATUS_WARNING
 
+## Admin page
+
+There is a simple admin page for the plugin available through Plugins -> Local plugins -> Nagios monitoring.
+
+This simply displays the available services in order for administrators to configure Nagios to check them.
+
 ## Notes
 
 1. The above describes how the Nagios plugin should be set up for an environment where Nagios and Moodle are running on the same server. This is unlikely to be the case for most installations, where the two systems may be on different servers. In this case, the Nagios NRPE system should be used.
