@@ -19,6 +19,7 @@
 // Copyright 2014 University of Strathclyde
 
 require_once('../../config.php');
+require_once($CFG->libdir.'/markdown/MarkdownInterface.php');
 require_once($CFG->libdir.'/markdown/Markdown.php');
 
 use Michelf\Markdown;

@@ -20,7 +20,6 @@
 
 define('CLI_SCRIPT', 1);
 require_once(__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/pluginlib.php');
 require_once($CFG->libdir.'/clilib.php');
 
 // TODO: Add some security!!!!
@@ -69,7 +68,7 @@ if ($critical < $warning) {
     exit(3);
 }
 
-$pluginmanager = plugin_manager::instance();
+$pluginmanager = core_plugin_manager::instance();
 $plugininfo = $pluginmanager->get_plugin_info($plugin);
 
 require_once($plugininfo->rootdir . '/lib.php');
@@ -81,7 +80,12 @@ if (!function_exists($checkfunction)) {
     exit(3);
 }
 
-$status = $checkfunction($service, $params);
+try {
+    $status = $checkfunction($service, $params);
+} catch (Exception $e) {
+    mtrace("ERROR: " . $e->getMessage());
+    exit(3);
+}
 
 echo $status['data']['text'];
 
