@@ -19,12 +19,11 @@
 // Copyright 2014 University of Strathclyde
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/markdown/Markdown.php');
-
-use Michelf\Markdown;
+require_once($CFG->libdir.'/adminlib.php');
 
 require_login(SITEID);
 require_capability('moodle/site:config', context_system::instance());
+admin_externalpage_setup('local_nagios');
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/nagios/admin.php');
@@ -34,28 +33,16 @@ $PAGE->set_heading("Nagios services");
 $PAGE->navbar->add("Nagios services");
 
 $action = optional_param('action', 'servicelist', PARAM_TEXT);
+$out = $PAGE->get_renderer('local_nagios');
 
 if ($action == 'servicelist') {
     $servicelist = \local_nagios\service::service_list();
-    $table = new html_table();
-    $table->head = array('Plugin', 'Service name', 'Description', 'Variable');
-    foreach ($servicelist as $plugin => $pluginservices) {
-        foreach ($pluginservices as $name => $pluginservice) {
-            $row = new html_table_row(array($plugin, $name, $pluginservice['description']));
-            if (isset($pluginservice['variable'])) {
-                $row->cells[] = new html_table_cell($pluginservice['variable']);
-            } else {
-                $row->cells[] = new html_table_cell();
-            }
-            $table->data[] = $row;
-        }
-    }
+
 
     echo $OUTPUT->header();
     echo $OUTPUT->heading("Nagios services");
-    echo html_writer::table($table);
-    $markdown = new Markdown();
-    echo $OUTPUT->box($markdown->transform(get_string('servicelist_help', 'local_nagios')));
+    echo $out->render_servicelist($servicelist);
+    echo $OUTPUT->box(markdown_to_html(get_string('servicelist_help', 'local_nagios')));
     echo $OUTPUT->footer();
 } else {
     die("Unknown action");

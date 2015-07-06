@@ -28,7 +28,7 @@ namespace local_nagios;
  * @author Michael Aherne
  *
  */
-class service {
+abstract class service {
 
     const SERVICELIST_FUNCTION = 'nagios_services';
     const STATUS_FUNCTION = 'nagios_status';
@@ -38,35 +38,85 @@ class service {
     const NAGIOS_STATUS_CRITICAL = 2;
     const NAGIOS_STATUS_UNKNOWN = 3;
 
-    public static $default_state_result = array(
-        'key'  => '',
-        'data' => array(
-        'status' => \local_nagios\service::NAGIOS_STATUS_UNKNOWN,
-        'type'    => 'state', // Can be a 'state' for OK, Warning, Critical, Unknown) or can be 'perf', which does
-                              // Cause an alert, but can be processed later by custom programs
-        'text'   => '',
-        ),
-    );
+    public $definition; // the definition from the db/local_nagios.php file
 
+    /**
+     * Check the status of the service.
+     *
+     * @param thresholds $thresholds the thresholds for the check
+     * @param array $params an array of parameters
+     * @return status_result the results of the check
+     */
+    abstract public function check_status(thresholds $thresholds, $params = array());
+
+    public function get_param_defs() {
+        if (!isset($this->definition) || !isset($this->definition['params'])) {
+            return array();
+        } else {
+            return $this->definition['params'];
+        }
+    }
+
+    /**
+     * Get a list of services available in this Moodle installation.
+     *
+     * @return array plugin name => array('name' => '\class\implementing\service')
+     */
     public static function service_list() {
         global $CFG;
 
-        require_once($CFG->dirroot.'/local/nagios/lib.php');
-        $result = array('local_nagios' => local_nagios_nagios_services());
+        $result = array();
 
-        $pluginswithservices = array('local_nagios');
         foreach (\core_component::get_plugin_types() as $plugintype => $fulldir) {
-            foreach (get_plugin_list_with_function($plugintype, self::SERVICELIST_FUNCTION) as $plugin => $function) {
-                if ($plugin == 'local_nagios') {
-                    continue;
-                }
-                try {
-                    $result[$plugin] = $function();
-                } catch (\Exception $e) {
-                    debugging("Unable to get Nagios services from $plugin");
+            foreach (\core_component::get_plugin_list($plugintype) as $name => $dir) {
+                $frankenstyle = $plugintype. '_' . $name;
+                if ($services = self::get_services($frankenstyle)) {
+                    $result[$frankenstyle] = $services;
                 }
             }
         }
+
+        return $result;
+    }
+
+    public static function get_services($plugin) {
+        $services = array();
+
+        $pluginmanager = \core_plugin_manager::instance();
+        $plugininfo = $pluginmanager->get_plugin_info($plugin);
+
+        if (is_null($plugininfo)) {
+            return;
+        }
+
+        $defsfile = $plugininfo->rootdir . '/db/local_nagios.php';
+
+        if (!file_exists($defsfile)) {
+            return;
+        }
+
+        include($defsfile);
+
+        return $services;
+    }
+
+    public static function get_service($plugin, $service) {
+        $services = self::get_services($plugin);
+
+        if (is_null($services) || empty($services) || !isset($services[$service])) {
+            throw new invalid_service_exception("Service $service not found in $plugin");
+        }
+
+        if (!isset($services[$service]['classname'])) {
+            throw new invalid_service_exception("classname parameter not found");
+        }
+
+        if (!class_exists($services[$service]['classname'])) {
+            throw new invalid_service_exception("Unable to find service class {$services[$service]['classname']}");
+        }
+
+        $result = new $services[$service]['classname']();
+        $result->definition = $services[$service];
 
         return $result;
     }

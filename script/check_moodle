@@ -22,7 +22,7 @@ use strict;
 use warnings;
 use Getopt::Long;
 
-my $MOODLE_HOME = '/var/www/beta';
+my $MOODLE_HOME = '/C/Users/vas07101/dev/htdocs/moodle'; #'/var/www/beta';
 my $PHP_COMMAND = 'php';
 
 my $plugin;
@@ -34,8 +34,8 @@ my $php_options = {
     'critical' => undef
 };
 
-GetOptions('plugin=s' => \$plugin, 'service=s' => \$service, 'warning=i' => \$php_options->{'warning'}, 
-    'critical=i' => \$php_options->{'critical'}, 'verbose+' => \$verbose);
+GetOptions('plugin=s' => \$plugin, 'service=s' => \$service, 'warning=s' => \$php_options->{'warning'}, 
+    'critical=s' => \$php_options->{'critical'}, 'verbose+' => \$verbose);
 
 die "plugin required" if not defined $plugin;
 die "service required" if not defined $service;

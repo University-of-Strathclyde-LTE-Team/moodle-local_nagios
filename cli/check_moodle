@@ -1,0 +1,21 @@
+#!/usr/bin/php
+<?php
+
+/*
+ *
+ * This is an executable PHP script which may help simplify
+ * setting up NRPE. 
+ * 
+ * Rather than having to configure the php path and settings in the NRPE config,
+ * they can be changed in the first line of this file, and check_moodle called
+ * as a shell script.
+ *
+ * It may also be a good idea to move this script outside your web root, and
+ * edit the path below.
+ * 
+ * Remember to use "chmod +x" to make it executable!
+ *
+ */
+
+$MOODLE_DIR = __DIR__.'/../../..';
+include $MOODLE_DIR.'/local/nagios/cli/check.php';

@@ -20,11 +20,18 @@
 
 $string['pluginname'] = 'Nagios monitoring';
 
+$string['local_nagios:scheduled_task:description'] = 'Check the time since the given scheduled task last completed. Parameter "task" is full classname of task class.';
+$string['local_nagios:scheduled_task:variable'] = 'Number of seconds since last run';
+$string['local_nagios:event_queue:description'] = 'Check the number of event handlers in the old events system.';
+$string['local_nagios:event_queue:variable'] = 'Number of event handlers';
+$string['local_nagios:adhoc_task:description'] = 'Check the number of ad-hoc tasks waiting to be processed.';
+$string['local_nagios:adhoc_task:variable'] = 'The number of ad-hoc tasks.';
+
 $string['servicelist_help'] = 'To monitor one of these services, create a new command in your Nagios configuration, e.g.
 
     define command {
         command_name    check_moodle_myplugin_my_service
-        command_line    /usr/lib/nagios/plugins/check_moodle -p local_myplugin -s my_service -w 10000 -c 20000
+        command_line    /usr/lib/nagios/plugins/check_moodle -p=local_myplugin -s=my_service -w=10000 -c=20000
     }
 
 with the following parameters:

@@ -27,10 +27,10 @@ Copy / move the Nagios plugin (/script/check_moodle) to your Nagios plugins dire
 ```
 define command{
         command_name    check_moodle_cron
-        command_line    /usr/lib/nagios/plugins/check_moodle -p local_nagios -s cron
+        command_line    /usr/lib/nagios/plugins/check_moodle -p=local_nagios -s=cron
         }
 ```
-Use these command in Nagios service definitions as normal.
+Note the use of Moodle-style parameter passing (using =). Use these command in Nagios service definitions as normal.
 
 ## Permission requirements
 
@@ -80,7 +80,7 @@ array(
 );
 ```
 
-The \local_nagios\service object has constants for the status code, e.g. \local_nagios\service::NAGIOS_STATUS_WARNING
+The \local_nagios\service object has constants for the status code, e.g. \local_nagios\service::NAGIOS\_STATUS\_WARNING
 
 ## Admin page
 

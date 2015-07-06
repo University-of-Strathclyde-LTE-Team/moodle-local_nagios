@@ -1,5 +1,9 @@
 <?php
 
+use local_nagios\thresholds;
+use local_nagios\threshold;
+use local_nagios\service;
+
 // This file is part of local_nagios
 //
 // local_nagios is free software: you can redistribute it and/or modify
@@ -20,10 +24,8 @@
 
 define('CLI_SCRIPT', 1);
 require_once(__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/pluginlib.php');
+// require_once($CFG->libdir.'/pluginlib.php');
 require_once($CFG->libdir.'/clilib.php');
-
-// TODO: Add some security!!!!
 
 // Get cli options.
 list($options, $unrecognized) = cli_get_params(
@@ -56,38 +58,42 @@ $service = $options['service'];
 $warning = $options['warning'];
 $critical = $options['critical'];
 
-$params = array();
+$thresholds = new thresholds();
+
 if ($options['warning']) {
-    $params['warning'] = $options['warning'];
+    $thresholds->warning = threshold::from_string($options['warning']);
 }
 if ($options['critical']) {
-    $params['critical'] = $options['critical'];
+    $thresholds->critical = threshold::from_string($options['critical']);
 }
 
-if ($critical < $warning) {
-    echo "Critical threshold cannot be less than warning";
-    exit(3);
+if (empty($thresholds->critical) && empty($thresholds->warning)) {
+    echo "No valid thresholds given";
+    exit(service::NAGIOS_STATUS_UNKNOWN);
 }
 
-$pluginmanager = plugin_manager::instance();
-$plugininfo = $pluginmanager->get_plugin_info($plugin);
+try {
+    $service = service::get_service($plugin, $service);
 
-require_once($plugininfo->rootdir . '/lib.php');
+    if (empty($service)) {
+        echo "Unable to get service $service from $plugin";
+        exit(3);
+    }
 
-$checkfunction = $plugin . '_nagios_status';
+    $params = cli_get_params($service->get_param_defs());
 
-if (!function_exists($checkfunction)) {
-    echo "Invalid plugin";
-    exit(3);
+    $status = $service->check_status($thresholds, $params[0]);
+
+    if (is_null($status)) {
+        throw new Exception("Service check returned no status");
+    }
+
+    echo $status->text;
+    exit($status->status);
+} catch (Exception $e) {
+    echo "ERROR: " . $e->getMessage();
+    exit(service::NAGIOS_STATUS_UNKNOWN);
 }
-
-$status = $checkfunction($service, $params);
-
-echo $status['data']['text'];
-
-exit($status['data']['status']);
-
-// TODO: Print the performance info if available
 
 function print_help() {
     echo "Runs a nagios status.";

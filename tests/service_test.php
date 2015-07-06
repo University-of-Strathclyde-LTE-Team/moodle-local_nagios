@@ -18,22 +18,33 @@
 // Author: Michael Aherne
 // Copyright 2014 University of Strathclyde
 
-class local_nagios_test_service extends advanced_testcase {
+use \local_nagios\service;
+
+class local_nagios_service_testcase extends advanced_testcase {
 
     public function testServiceList() {
-        $list = \local_nagios\service::service_list();
+        $list = service::service_list();
         $this->assertArrayHasKey('local_nagios', $list);
         $coreservices = $list['local_nagios'];
-        $this->assertArrayHasKey('cron', $coreservices);
+        $this->assertContains('local_nagios\nagios\scheduled_task_service', $coreservices);
     }
 
-    public function testService() {
-        $service = new \local_nagios\service('cron');
-        $this->assertAttributeEquals('local_nagios', 'plugin', $service);
-        $this->assertAttributeEquals('cron', 'service', $service);
+    public function testGetServices() {
+        $services = service::get_services('local_nagios');
+        $this->assertNotNull($services);
+        $this->assertArrayHasKey('scheduled_task', $services);
 
-        // temp
-        print_r($service->status());
+        $services = service::get_services('non_existant');
+        $this->assertNull($services);
+
+    }
+
+    public function testGetService() {
+        $service = service::get_service('local_nagios', 'scheduled_task');
+        $this->assertInstanceOf('local_nagios\service', $service);
+
+        $this->setExpectedException('local_nagios\invalid_service_exception');
+        $service = service::get_service('local_nagios', 'non_existent');
     }
 
 }
