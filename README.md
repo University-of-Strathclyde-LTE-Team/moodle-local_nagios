@@ -27,10 +27,10 @@ Copy / move the Nagios plugin (/script/check_moodle) to your Nagios plugins dire
 ```
 define command{
         command_name    check_moodle_cron
-        command_line    /usr/lib/nagios/plugins/check_moodle -p=local_nagios -s=cron
+        command_line    /usr/lib/nagios/plugins/check_moodle -p local_nagios -s cron
         }
 ```
-Note the use of Moodle-style parameter passing (using =). Use these command in Nagios service definitions as normal.
+Use these command in Nagios service definitions as normal.
 
 ## Permission requirements
 
@@ -39,17 +39,48 @@ Note the use of Moodle-style parameter passing (using =). Use these command in N
 
 ## Service API
 
-The local\_nagios plugin scans other Moodle plugins looking for a db/local_nagios.php file.
+The local_nagios plugin scans other Moodle plugins looking for the callbacks "nagios_services" and "nagios_status" in lib.php.
 
-### db/local_nagios.php
+### nagios_services callback
 
-This should contain a single definition for a variable named "$services", which is an associative array of service name to definition. The definition is a key value pair containing at least the "classname", and optionally "params". See the plugin's db/local_nagios.php file for examples.
+This provides metadata on the services provided by the plugin. It is a simple array of items like this:
 
-### service class
+```
+array(
+        'cron' => array(
+            'name' => 'Cron job',
+            'description' => 'Checks that the cron job is running properly by checking the last time it was run.',
+            'variable' => 'Number of seconds since last run'
+        ),
+        'eventqueue' => array(
+            'name' => 'Event queue',
+            'description' => 'Monitor the size of the event handling queue.',
+            'variable' => 'Number of handlers in the event_queue_handlers table'
+        )
+    )
+```
 
-The service class must extend the local\_nagios\service class and implement the check\_status() method.
+### nagios_status callback
 
-The \local\_nagios\service object has constants for the status code, e.g. \local\_nagios\service::NAGIOS\_STATUS\_WARNING
+This does the actual service checking. The function should have the signature XXX_nagios_status($service, $params = null), and return a data object in the format described in the next section.
+
+### Status result format
+
+The result format is as follows:
+
+```
+array(
+  'key'  => 'IDENTIFIER',
+  'data' => array(
+    'status' => STATUS_CODE,
+    'type    => 'state', // Can be a 'state' for OK, Warning, Critical, Unknown) or can be 'perf', which does
+                         // Cause an alert, but can be processed later by custom programs
+    'text'   => 'Text description for the problem',
+  ),
+);
+```
+
+The \local_nagios\service object has constants for the status code, e.g. \local_nagios\service::NAGIOS_STATUS_WARNING
 
 ## Admin page
 
