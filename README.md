@@ -4,7 +4,7 @@ This is a Moodle plugin to simplify monitoring the Moodle service (as opposed to
 using [Nagios](http://www.nagios.org/). It provides:
 
 1. A simple API which allows plugins to implement "services" which can be monitored.
-2. A Nagios plugin script (/script/check_moodle) which communicates with the Moodle plugin
+2. A Nagios plugin script (/cli/check_moodle) which communicates with the Moodle plugin
    to get service status into Nagios.
 3. A couple of simple example services.
 
@@ -17,8 +17,11 @@ using [Nagios](http://www.nagios.org/). It provides:
 ### Moodle plugin
 The Moodle plugin should be installed as normal.
 ### Nagios plugin
+The Nagios plugin requires a PHP executable to be available on the server.
+
 (All paths given are the default locations for a Ubuntu install of nagios3 using apt-get)
-Copy / move the Nagios plugin (/script/check_moodle) to your Nagios plugins directory (/usr/lib/nagios/plugins). Change the permissions on the script to make it executable. Edit the $MOODLE_HOME and $PHP_COMMAND variables to reflect your environment.
+
+Copy / move / symlink the Nagios plugin (/cli/check_moodle) to your Nagios plugins directory (/usr/lib/nagios/plugins). Change the permissions on the script to make it executable. Edit the $MOODLE_DIR and (if necessary) the PHP location in the shebang line to reflect your environment.
 
 ## Configuration
 1. Create a new file, moodle.cfg, in your Nagios plugins configuration directory (/etc/nagios-plugins/config).
@@ -35,7 +38,7 @@ Note the use of Moodle-style parameter passing (using =). Use these command in N
 ## Permission requirements
 
 1. The Nagios plugin calls the script /cli/check.php in the Moodle plugin. This means that the user account Nagios is running under *must* have write access to the Moodle data directory, otherwise all checks will result in an error message.
-2. If the user account Nagios is running under has to use sudo to call the PHP executable, this must be configured in the $PHP_COMMAND variable in the check_moodle script. The sudo access for the account must also be configured to be able to run the PHP executable without being challenged for a password.
+2. If the user account Nagios is running under has to use sudo to call the PHP executable, this must be configured in the shebang line in the check_moodle script. The sudo access for the account must also be configured to be able to run the PHP executable without being challenged for a password.
 
 ## Service API
 
