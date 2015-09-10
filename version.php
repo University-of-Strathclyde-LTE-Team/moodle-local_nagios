@@ -21,7 +21,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2015070300;               // If version == 0 then module will not be installed
-$plugin->requires  = 2014111000;      // Requires this Moodle version
+$plugin->requires  = 2014051200;      // Requires this Moodle version
 $plugin->maturity  = MATURITY_ALPHA;
 $plugin->cron      = 0;               // Period for cron to check this module (secs)
 $plugin->component = 'local_nagios'; // To check on upgrade, that module sits in correct place
