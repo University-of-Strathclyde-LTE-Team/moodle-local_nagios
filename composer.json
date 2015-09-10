@@ -1,0 +1,18 @@
+{
+    "name": "micaherne/moodle-local_nagios",
+    "description": "Enables monitoring of parts of the Moodle application as nagios services",
+    "type": "moodle-local",
+    "require": {
+        "composer/installers": "^1.0"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Michael Aherne",
+            "email": "michael.aherne@strath.ac.uk"
+        }
+    ],
+    "extra": {
+        "installer-name": "nagios"
+    }
+}
