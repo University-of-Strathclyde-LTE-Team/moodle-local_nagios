@@ -34,8 +34,10 @@ my $php_options = {
     'critical' => undef
 };
 
+my $service_options;
+
 GetOptions('plugin=s' => \$plugin, 'service=s' => \$service, 'warning=s' => \$php_options->{'warning'}, 
-    'critical=s' => \$php_options->{'critical'}, 'verbose+' => \$verbose);
+    'critical=s' => \$php_options->{'critical'}, 'verbose+' => \$verbose, 'option=s%' => \$service_options);
 
 die "plugin required" if not defined $plugin;
 die "service required" if not defined $service;
@@ -47,6 +49,13 @@ for my $key ( keys %$php_options) {
         $command .=  " --$key=$value";
     }
 };
+
+for my $key ( keys %$service_options) {
+	my $value = $service_options->{$key};
+	if (defined $value) {
+		$command .=  " --$key=$value";
+	}
+}
 
 my $result = qx/$command/;
 print $result;

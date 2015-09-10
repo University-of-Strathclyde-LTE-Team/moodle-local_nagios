@@ -31,6 +31,7 @@ define command{
         }
 ```
 Note the use of Moodle-style parameter passing (using =). Use these command in Nagios service definitions as normal.
+Pass additional (service-specific) params using one or more -o (--option) parameters, i.e. -o=task='\\core\\task\\events_cron_task'
 
 ## Permission requirements
 
