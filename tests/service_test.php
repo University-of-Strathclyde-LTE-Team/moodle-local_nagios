@@ -26,7 +26,9 @@ class local_nagios_service_testcase extends advanced_testcase {
         $list = service::service_list();
         $this->assertArrayHasKey('local_nagios', $list);
         $coreservices = $list['local_nagios'];
-        $this->assertContains('local_nagios\nagios\scheduled_task_service', $coreservices);
+        $this->assertArrayHasKey('scheduled_task', $coreservices);
+        $this->assertEquals('local_nagios\nagios\scheduled_task_service',
+            $coreservices['scheduled_task']['classname']);
     }
 
     public function testGetServices() {
