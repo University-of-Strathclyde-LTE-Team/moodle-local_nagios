@@ -43,8 +43,8 @@ class local_nagios_service_testcase extends advanced_testcase {
         $service = service::get_service('local_nagios', 'scheduled_task');
         $this->assertInstanceOf('local_nagios\service', $service);
 
-        $this->setExpectedException('local_nagios\invalid_service_exception');
-        $service = service::get_service('local_nagios', 'non_existent');
+        $this->expectException('local_nagios\invalid_service_exception');
+        service::get_service('local_nagios', 'non_existent');
     }
 
 }
