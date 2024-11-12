@@ -1,5 +1,8 @@
 # local_nagios
 
+**This plugin is obsolete and its functionality is now covered by the [Moodle Check API](https://moodledev.io/docs/4.4/apis/subsystems/check).**
+**It will not be maintained and may be deleted without notice.**
+
 This is a Moodle plugin to simplify monitoring the Moodle service (as opposed to the hardware and infrastructure)
 using [Nagios](http://www.nagios.org/). It provides:
 
